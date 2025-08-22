@@ -21,6 +21,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import ChulaCareLogo from "@/assets/images/logo.png";
+import { LoginAuthService } from "@/services/auth";
 
 type Form = { username: string; password: string };
 
@@ -54,24 +55,12 @@ export default function LoginPage() {
 
     try {
       setLoading(true);
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL ?? ""}/auth/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include", // รับคุกกี้เซสชันจากแบ็กเอนด์ (เช่น connect.sid)
-          body: JSON.stringify(form),
-        }
-      );
-      if (!res.ok) {
-        const msg =
-          (await res.json().catch(() => ({})))?.message ??
-          "เข้าสู่ระบบไม่สำเร็จ";
-        throw new Error(Array.isArray(msg) ? msg.join(", ") : msg);
-      }
+      await LoginAuthService(form);
       router.replace(redirect || "/");
-    } catch (err: any) {
-      setApiError(err.message || "เกิดข้อผิดพลาด");
+    } catch (error: any) {
+      const msg =
+        error?.response?.data?.message || error?.message || "เกิดข้อผิดพลาด";
+      setApiError(Array.isArray(msg) ? msg.join(", ") : msg);
     } finally {
       setLoading(false);
     }
@@ -171,7 +160,6 @@ export default function LoginPage() {
             }}
           />
 
-          {/* Password */}
           <TextField
             type={showPwd ? "text" : "password"}
             placeholder="password"
@@ -210,14 +198,12 @@ export default function LoginPage() {
             }}
           />
 
-          {/* Error จาก API */}
           {apiError && (
             <Typography variant="body2" color="error">
               {apiError}
             </Typography>
           )}
 
-          {/* ปุ่ม Sign in */}
           <Button
             onClick={handleLogin}
             disabled={loading}
