@@ -1,0 +1,202 @@
+.btn-primary {
+  color: $white;
+  padding: 0px;
+  &:hover {
+    color: $primary;
+    background-color: $white;
+    img {
+      filter: $svgPrimary;
+    }
+  }
+}
+
+.btn-secondary {
+  color: $charcoal;
+  background-color: $white;
+  padding: 0px;
+  border: 1px solid $smoke;
+  &:hover {
+    color: $white;
+    background-color: $primary;
+    border: 1px solid $primary;
+    img {
+      filter: $svgWhite;
+    }
+  }
+}
+
+.btn-secondary-light {
+  color: $grey;
+  border: 1px solid $smoke;
+
+  display: inline-block;
+  padding: 4px 20px;
+  border-radius: 9999px;
+  white-space: nowrap;
+  user-select: none;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover,
+  &:active {
+    color: $white !important;
+    background-color: $primary !important;
+    border-color: $primary !important;
+
+    img {
+      filter: $svgWhite !important;
+    }
+  }
+}
+
+.btn-gradient {
+  background-image: linear-gradient(to right, #0b8fd6 35%, #1c65cc 100%);
+  border: 1px solid transparent;
+  color: #fff;
+  font-size: var(--btn-font-size);
+  border-radius: 5rem;
+  padding: 0.5rem 1.5rem;
+  transition: all 0.3s ease;
+  &:hover,
+  &:active {
+    background-color: #fff !important;
+    background-image: none !important;
+    border: 1px solid $primary !important;
+    color: $primary !important;
+  }
+}
+
+.btn-outline-secondary {
+  color: $grey;
+  border: 1px solid $smoke;
+  background-color: $white;
+  &:hover {
+    color: $primary;
+    background-color: $white;
+    border: 1px solid $primary;
+  }
+}
+
+.btn-inline-primary {
+  color: $primary;
+  border: 1px solid $white;
+  background-color: $primary;
+  padding: 0px;
+  img {
+    filter: $svgWhite;
+  }
+  &:hover {
+    color: $white;
+    background-color: $primary;
+    border: 1px solid $white;
+    img {
+      filter: $svgWhite;
+    }
+  }
+}
+
+.btn-inline-secondary {
+  color: $white;
+  border: 1px solid $smoke !important;
+  background-color: $white;
+  padding: 0px;
+  &:hover {
+    color: $primary;
+    background-color: $white;
+    border: 1px solid $smoke;
+    img {
+      filter: $svgPrimary;
+    }
+  }
+}
+.btn-inline-secondary-bookmark {
+  border: 1px solid $smoke;
+  background-color: $white;
+  padding: 0px;
+  img {
+    filter: $svgPrimary;
+  }
+  &:hover {
+    background-color: $primary;
+    border: 1px solid $smoke !important;
+    img {
+      filter: $svgWhite;
+    }
+  }
+}
+
+.btn-outline-danger {
+  &:hover {
+    color: $white;
+  }
+}
+
+.btn-list-secondary {
+  padding: 0px;
+  color: $charcoal;
+  background-color: transparent;
+  border: none;
+  &:hover,
+  &:active {
+    color: $primary !important;
+    background-color: $greyBackground !important;
+    img {
+      filter: $svgPrimary;
+    }
+  }
+}
+
+.btn-tag-button {
+  min-height: "30px";
+  padding-top: 0px;
+  padding-bottom: 0px;
+  color: $charcoal;
+  background-color: transparent;
+  border: 1px solid $smoke;
+  &:hover,
+  &:active {
+    color: $primary !important;
+    border: 1px solid $smoke !important;
+    img {
+      filter: $svgPrimary;
+    }
+  }
+}
+
+.btn-disable-tag-button {
+  min-height: "30px";
+  padding-top: 0px;
+  padding-bottom: 0px;
+  color: $charcoal;
+  background-color: $smoke !important;
+  border: 1px solid $smoke !important;
+  cursor: not-allowed !important;
+  &:hover,
+  &:active {
+    background-color: $smoke !important;
+    border: 1px solid $smoke !important;
+  }
+}
+
+.btn-dropdown {
+  color: $charcoal;
+  background-color: transparent;
+  border: 1px solid $smoke;
+  &:hover,
+  &:active,
+  &:focus-within {
+    color: $charcoal !important;
+    border: 1px solid $smoke !important;
+  }
+}
+
+.btn-text {
+  padding: 0px;
+  color: $charcoal;
+  background-color: transparent;
+  border: none;
+  &:hover,
+  &:active {
+    color: $primary !important;
+  }
+}

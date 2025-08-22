@@ -1,0 +1,15 @@
+$gray-ccc: #cccccc;
+$grey-f5: #f5f5f5;
+
+::-webkit-scrollbar {
+  scrollbar-width: thin;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  &-track {
+    background-color: $grey-f5;
+  }
+  &-thumb {
+    background-color: $gray-ccc;
+    border-radius: 6px;
+    border: 3px solid $grey-f5;
+  }
+}

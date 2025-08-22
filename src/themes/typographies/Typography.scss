@@ -1,0 +1,65 @@
+@import "../Theme.scss";
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: calc($spacer * 0.75);
+  font-weight: 600;
+  line-height: 1.5715;
+  color: $charcoal;
+}
+
+.h1,
+h1 {
+  font-size: calc(1.2875rem + 0.45vw) !important;
+}
+.h2,
+h2 {
+  font-size: calc(1.275rem + 0.3vw);
+}
+.h3,
+h3 {
+  font-size: calc(1.2625rem + 0.15vw);
+}
+.h4,
+h4 {
+  font-size: 1.25rem;
+}
+.h5,
+h5 {
+  font-size: 1.125rem;
+}
+.h6,
+h6 {
+  font-size: 1rem;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: var(--spacer-2);
+}
+
+@media (min-width: 1200px) {
+  .h1,
+  h1 {
+    font-size: 1.625rem !important;
+  }
+  .h2,
+  h2 {
+    font-size: 1.5rem;
+  }
+  .h3,
+  h3 {
+    font-size: 1.375rem;
+  }
+}
