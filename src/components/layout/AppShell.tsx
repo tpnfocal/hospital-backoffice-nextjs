@@ -10,36 +10,33 @@ import {
   IconButton,
   List,
   ListItemButton,
+  ListItemIcon,
   ListItemText,
   Toolbar,
+  Tooltip,
   Typography,
   useMediaQuery,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useTheme } from "@mui/material/styles";
+import ChulaCareLogo from "@/assets/images/logo.png";
+import { navItems } from "@/config/nav";
+import { useAuth } from "@/hooks/useAuth";
 
-const NAV = { expanded: 220, collapsed: 64 };
-
-const navItems = [
-  { label: "Dashboard", href: "/" },
-  { label: "Users", href: "/users" },
-  { label: "Contents", href: "/contents" },
-];
+const NAV = { expanded: 230, collapsed: 64 };
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const theme = useTheme();
-  // อย่าให้ SSR ประเมิน media-query (กัน hydration flip)
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"), { noSsr: true });
+
+  const { canSee } = useAuth();
 
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [year, setYear] = useState<string>("");
-
-  // ปีใช้หลัง mount กัน hydration mismatch
-  useEffect(() => setYear(String(new Date().getFullYear())), []);
 
   const sidebarWidth = collapsed ? NAV.collapsed : NAV.expanded;
 
@@ -47,58 +44,91 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <Box
         sx={{
-          p: 2,
-          color: "#fff",
-          fontWeight: 700,
-          textAlign: collapsed ? "center" : "left",
+          display: "flex",
+          alignItems: "center",
+          gap: 1.25,
+          py: 2,
+          px: collapsed ? 0 : 2,
+          justifyContent: collapsed ? "center" : "flex-start",
+          color: "var(--text-white)",
         }}
       >
-        {collapsed ? "CC" : "Chula Care"}
+        <Image
+          src={ChulaCareLogo}
+          alt="Chula Care"
+          width={collapsed ? 28 : 32}
+          height={collapsed ? 28 : 32}
+          priority
+          style={{ borderRadius: 6 }}
+        />
+        {!collapsed && (
+          <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
+            Chula Care
+          </Typography>
+        )}
       </Box>
-      <Divider sx={{ borderColor: "rgba(255,255,255,0.2)" }} />
-      <List sx={{ flex: 1, p: 1 }}>
-        {navItems.map((item) => {
-          const active = pathname === item.href;
-          return (
-            <ListItemButton
-              key={item.href}
-              component={Link}
-              href={item.href}
-              onClick={() => setMobileOpen(false)}
-              sx={{
-                borderRadius: 1,
-                my: 0.5,
-                color: "#eaf7ef",
-                ...(active && {
-                  backgroundColor: "var(--box-color)",
-                  color: "#fff",
-                }),
-                "&:hover": { bgcolor: "rgba(255,255,255,0.18)" },
-                justifyContent: collapsed ? "center" : "flex-start",
-              }}
-            >
-              <ListItemText
-                primary={item.label}
-                primaryTypographyProps={{
-                  noWrap: true,
-                  sx: { textAlign: collapsed ? "center" : "left" },
+
+      <Divider sx={{ borderColor: "var(--divider)" }} />
+
+      <List sx={{ flex: 1, py: 1 }}>
+        {navItems
+          .filter((i) => canSee(i.roles))
+          .map((item) => {
+            const active =
+              item.href === "/"
+                ? pathname === "/"
+                : pathname.startsWith(item.href);
+            const Button = (
+              <ListItemButton
+                key={item.href}
+                component={Link}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                sx={{
+                  mx: 1,
+                  borderRadius: 1,
+                  my: 0.5,
+                  color: "var(--text-light)",
+                  ...(active && {
+                    backgroundColor: "var(--box-color)",
+                    color: "var(--text-white)",
+                  }),
+                  "&:hover": { backgroundColor: "rgba(255,255,255,0.18)" },
+                  justifyContent: collapsed ? "center" : "flex-start",
+                  minHeight: 44,
                 }}
-              />
-            </ListItemButton>
-          );
-        })}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: collapsed ? 0 : 1.5,
+                    color: "inherit",
+                  }}
+                >
+                  {item.icon}
+                </ListItemIcon>
+
+                {!collapsed && (
+                  <ListItemText
+                    primary={item.label}
+                    primaryTypographyProps={{
+                      noWrap: true,
+                      sx: { fontSize: 14, fontWeight: 500 },
+                    }}
+                  />
+                )}
+              </ListItemButton>
+            );
+
+            return collapsed ? (
+              <Tooltip title={item.label} placement="right" key={item.href}>
+                {Button}
+              </Tooltip>
+            ) : (
+              Button
+            );
+          })}
       </List>
-      <Divider sx={{ borderColor: "rgba(255,255,255,0.2)" }} />
-      <Box
-        sx={{
-          p: 2,
-          fontSize: 12,
-          color: "#eaf7ef",
-          textAlign: collapsed ? "center" : "left",
-        }}
-      >
-        © {year}
-      </Box>
     </Box>
   );
 
@@ -106,14 +136,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
 
-      {/* AppBar ไม่ทับ Sidebar */}
       <AppBar
         position="fixed"
         color="inherit"
         elevation={1}
         sx={{
           borderBottom: "1px solid",
-          borderColor: "divider",
+          borderColor: "var(--divider)",
           left: { xs: 0, sm: `${sidebarWidth}px` },
           width: { xs: "100%", sm: `calc(100% - ${sidebarWidth}px)` },
           transition: (t) =>
@@ -206,7 +235,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             }),
           minHeight: "100dvh",
           bgcolor: "background.default",
-          pt: `56px`,
+          pt: "56px",
         }}
       >
         <Box sx={{ p: 3 }}>{children}</Box>
