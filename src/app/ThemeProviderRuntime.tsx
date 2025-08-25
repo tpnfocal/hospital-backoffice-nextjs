@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { createTheme, ThemeProvider, type Theme } from "@mui/material/styles";
 
 function resolveVar(name: string, fallback: string) {
