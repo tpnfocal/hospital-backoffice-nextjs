@@ -1,0 +1,17 @@
+@mixin container($max: 1200px, $pad: 16px) {
+  max-width: $max;
+  margin-inline: auto;
+  padding-inline: $pad;
+}
+
+@mixin line-clamp($n) {
+  display: -webkit-box;
+  -webkit-line-clamp: $n;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@mixin sidebar-green-gradient {
+  background: linear-gradient(180deg, #34d399 0%, #10b981 50%, #059669 100%);
+  color: #fff;
+}

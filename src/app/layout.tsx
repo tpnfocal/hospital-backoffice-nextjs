@@ -1,15 +1,13 @@
 import "./globals.css";
-import MuiThemeProvider from "./theme";
+import ThemeProviderRuntime from "./ThemeProviderRuntime";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export const metadata = { title: "Chula Care Backoffice" };
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="th">
       <body>
-        <MuiThemeProvider>{children}</MuiThemeProvider>
+        <ThemeProviderRuntime>{children}</ThemeProviderRuntime>
       </body>
     </html>
   );
