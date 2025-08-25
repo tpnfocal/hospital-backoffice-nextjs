@@ -70,7 +70,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 my: 0.5,
                 color: "#eaf7ef",
                 ...(active && {
-                  bgcolor: "rgba(255,255,255,0.25)",
+                  backgroundColor: "var(--box-color)",
                   color: "#fff",
                 }),
                 "&:hover": { bgcolor: "rgba(255,255,255,0.18)" },
@@ -146,7 +146,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </Toolbar>
       </AppBar>
 
-      {/* Sidebar Desktop: fixed 100vh */}
       <Box
         sx={{
           display: { xs: "none", sm: "block" },
@@ -166,8 +165,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 duration: t.transitions.duration.standard,
               }),
             boxSizing: "border-box",
-            background:
-              "linear-gradient(180deg, #34d399 0%, #10b981 50%, #059669 100%)",
+            background: "var(--sidebar-green-gradient)",
             color: "#fff",
             overflowX: "hidden",
             display: "flex",
@@ -188,8 +186,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           display: { xs: "block", sm: "none" },
           "& .MuiDrawer-paper": {
             width: NAV.expanded,
-            background:
-              "linear-gradient(180deg, #34d399 0%, #10b981 50%, #059669 100%)",
+            background: "var(--sidebar-green-gradient)",
             color: "#fff",
           },
         }}
@@ -209,7 +206,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             }),
           minHeight: "100dvh",
           bgcolor: "background.default",
-          pt: `56px`, // ให้ตรงกับ Toolbar สูง 56
+          pt: `56px`,
         }}
       >
         <Box sx={{ p: 3 }}>{children}</Box>

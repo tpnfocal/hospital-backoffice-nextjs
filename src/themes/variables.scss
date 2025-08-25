@@ -15,6 +15,7 @@ $paper: #ffffff;
 $text: #101828;
 $text-muted: #667085;
 $divider: #e5e7eb;
+$boxColor: rgba(255, 255, 255, 0.25);
 
 $radius-sm: 6px;
 $radius-md: 12px;
@@ -84,6 +85,14 @@ $font-stack: "Helvetica Neue", Helvetica, PingFang SC, Hiragino Sans GB,
   --bp-sm: #{$bp-sm};
   --bp-md: #{$bp-md};
   --bp-lg: #{$bp-lg};
+
+  --box-color: #{$boxColor};
+  --sidebar-green-gradient: linear-gradient(
+    180deg,
+    #34d399 0%,
+    #10b981 50%,
+    #059669 100%
+  );
 }
 
 :root[data-theme="dark"] {
