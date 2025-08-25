@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AppBar,
   Box,
@@ -20,6 +20,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "@mui/material/styles";
 
+const NAV = { expanded: 220, collapsed: 64 };
+
 const navItems = [
   { label: "Dashboard", href: "/" },
   { label: "Users", href: "/users" },
@@ -29,14 +31,17 @@ const navItems = [
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  // อย่าให้ SSR ประเมิน media-query (กัน hydration flip)
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"), { noSsr: true });
 
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [year, setYear] = useState<string>("");
 
-  const sidebarWidth = collapsed
-    ? theme.custom.nav.collapsed
-    : theme.custom.nav.expanded;
+  // ปีใช้หลัง mount กัน hydration mismatch
+  useEffect(() => setYear(String(new Date().getFullYear())), []);
+
+  const sidebarWidth = collapsed ? NAV.collapsed : NAV.expanded;
 
   const DrawerContent = (
     <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
@@ -92,7 +97,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           textAlign: collapsed ? "center" : "left",
         }}
       >
-        © {new Date().getFullYear()}
+        © {year}
       </Box>
     </Box>
   );
@@ -101,6 +106,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
 
+      {/* AppBar ไม่ทับ Sidebar */}
       <AppBar
         position="fixed"
         color="inherit"
@@ -117,7 +123,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           zIndex: (t) => t.zIndex.drawer + 1,
         }}
       >
-        <Toolbar sx={{ gap: 1, minHeight: theme.custom.toolbarHeight }}>
+        <Toolbar sx={{ gap: 1, minHeight: 56 }}>
           <IconButton
             edge="start"
             aria-label="toggle sidebar"
@@ -128,7 +134,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             <MenuIcon />
           </IconButton>
 
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 700 }}
+            suppressHydrationWarning
+          >
             Backoffice
           </Typography>
 
@@ -136,6 +146,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </Toolbar>
       </AppBar>
 
+      {/* Sidebar Desktop: fixed 100vh */}
       <Box
         sx={{
           display: { xs: "none", sm: "block" },
@@ -155,7 +166,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 duration: t.transitions.duration.standard,
               }),
             boxSizing: "border-box",
-            background: theme.custom.sidebarGradient,
+            background:
+              "linear-gradient(180deg, #34d399 0%, #10b981 50%, #059669 100%)",
             color: "#fff",
             overflowX: "hidden",
             display: "flex",
@@ -166,6 +178,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </Box>
       </Box>
 
+      {/* Sidebar Mobile */}
       <Drawer
         variant="temporary"
         open={mobileOpen}
@@ -174,8 +187,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         sx={{
           display: { xs: "block", sm: "none" },
           "& .MuiDrawer-paper": {
-            width: theme.custom.nav.expanded,
-            background: theme.custom.sidebarGradient,
+            width: NAV.expanded,
+            background:
+              "linear-gradient(180deg, #34d399 0%, #10b981 50%, #059669 100%)",
             color: "#fff",
           },
         }}
@@ -183,6 +197,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         {DrawerContent}
       </Drawer>
 
+      {/* Main */}
       <Box
         component="main"
         sx={{
@@ -194,7 +209,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             }),
           minHeight: "100dvh",
           bgcolor: "background.default",
-          pt: `${theme.custom.toolbarHeight}px`,
+          pt: `56px`, // ให้ตรงกับ Toolbar สูง 56
         }}
       >
         <Box sx={{ p: 3 }}>{children}</Box>
